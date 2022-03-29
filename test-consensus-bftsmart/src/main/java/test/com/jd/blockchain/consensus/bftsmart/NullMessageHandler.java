@@ -118,6 +118,11 @@ public class NullMessageHandler implements MessageHandle{
 		public byte[] getSnapshot() {
 			return BytesUtils.EMPTY_BYTES;
 		}
-		
+
+		@Override
+		public long getTimestamp() {
+			return 0;
+		}
+
 	}
 }
