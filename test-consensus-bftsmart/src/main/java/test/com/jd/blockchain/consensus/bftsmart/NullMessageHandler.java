@@ -14,19 +14,19 @@ import utils.io.BytesUtils;
 
 
 public class NullMessageHandler implements MessageHandle{
-	
+
 	private AtomicLong id = new AtomicLong(0);
-	
+
 	private EmptyStateSnapshot genesitSnapshot= new EmptyStateSnapshot(-1);
 	private EmptyStateSnapshot lastSnapshot;
-	
+
 	private EmptyStateSnapshot batch;
-	
-	
+
+
 	public NullMessageHandler() {
 	}
-	
-	
+
+
 	@Override
 	public synchronized String beginBatch(ConsensusContext consensusContext) {
 		if (batch != null) {
@@ -89,22 +89,50 @@ public class NullMessageHandler implements MessageHandle{
 	}
 
 	@Override
+	public StateSnapshot getLatestStateSnapshot(String realName) {
+		return null;
+	}
+
+	@Override
+	public StateSnapshot getGenesisStateSnapshot(String realName) {
+		return null;
+	}
+
+	@Override
+	public int getCommandsNumByCid(String realName, int cid) {
+		return 0;
+	}
+
+	@Override
+	public byte[][] getCommandsByCid(String realName, int cid, int currCidCommandsSize) {
+		return new byte[0][];
+	}
+
+	@Override
+	public byte[] getBlockHashByCid(String realName, int cid) {
+		return new byte[0];
+	}
+
+	@Override
+	public long getTimestampByCid(String realName, int cid) {
+		return 0;
+	}
+
 	public StateSnapshot getStateSnapshot(ConsensusContext consensusContext) {
 		return lastSnapshot == null ? genesitSnapshot : lastSnapshot;
 	}
 
-	@Override
 	public StateSnapshot getGenesisStateSnapshot(ConsensusContext consensusContext) {
 		return genesitSnapshot;
 	}
 
-	
-	private static class EmptyStateSnapshot implements StateSnapshot{
-		
+
+		private static class EmptyStateSnapshot implements StateSnapshot{
+
 		private long id;
-		
+
 		private CompletableAsyncFuture<byte[]> emptyFuture = new CompletableAsyncFuture<>();
-		
+
 		public EmptyStateSnapshot(long id) {
 			this.id = id;
 		}
@@ -119,10 +147,10 @@ public class NullMessageHandler implements MessageHandle{
 			return BytesUtils.EMPTY_BYTES;
 		}
 
-		@Override
-		public long getTimestamp() {
-			return 0;
-		}
+			@Override
+			public long getTimestamp() {
+				return 0;
+			}
 
-	}
+		}
 }
